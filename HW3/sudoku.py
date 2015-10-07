@@ -122,17 +122,17 @@ class Sudoku:
         if factor_type == BOX:
             key = 'box' + str(i)
             for item in self.box(i):
-                if item != 0:
+                if item in values:
                     values.remove(item)
         if factor_type == ROW:
             key = 'row' + str(i)
             for item in self.row(i):
-                if item != 0:
+                if item in values:
                     values.remove(item)
         if factor_type == COL:
             key = 'col' + str(i)
             for item in self.col(i):
-                if item != 0:
+                if item in values:
                     values.remove(item)
         self.factorRemaining[key] = values
         return None #values
