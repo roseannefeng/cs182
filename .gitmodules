@@ -1,0 +1,3 @@
+[submodule "hw3"]
+	path = hw3
+	url = http://github.com/cs182/hw3.git
