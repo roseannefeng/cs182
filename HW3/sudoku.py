@@ -186,7 +186,8 @@ class Sudoku:
             domain = self.variableDomain(r, c)
             successors = []
             for i in domain:
-                successors.append(self.setVariable(r, c, i))
+                if i:
+                    successors.append(self.setVariable(r, c, i))
             return successors
         else:
             raise ValueError
