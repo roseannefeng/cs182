@@ -117,24 +117,24 @@ class Sudoku:
         `factor_type` is one of BOX, ROW, COL 
         `i` is an index between 0 and 8.
         """
-        values = range(9)
+        values = range(1,10)
         key = ''
+
         if factor_type == BOX:
-            key = 'box' + str(i)
-            for item in self.box(i):
-                if item in values:
-                    values.remove(item)
-        if factor_type == ROW:
-            key = 'row' + str(i)
-            for item in self.row(i):
-                if item in values:
-                    values.remove(item)
-        if factor_type == COL:
-            key = 'col' + str(i)
-            for item in self.col(i):
-                if item in values:
-                    values.remove(item)
-        self.factorRemaining[key] = values
+            remove = self.box(i)
+        elif factor_type == ROW:
+            remove = self.row(i)
+        elif factor_type == COL:
+            remove = self.col(i)
+        else:
+            raise ValueError
+
+#        for item in remove:
+#            if item in values:
+#                values[item-1] = None
+
+        self.factorNumConflicts[factor_type, i] = crossOff(values, remove)
+        self.factorRemaining[factor_type, i] = values
         return None #values
 #        raise NotImplementedError()
         
@@ -180,6 +180,16 @@ class Sudoku:
         Returns new assignments with each possible value 
         assigned to the variable returned by `nextVariable`.
         """
+        v = self.nextVariable()
+        if v:
+            r, c = v
+            domain = self.variableDomain(r, c)
+            successors = []
+            for i in domain:
+                successors.append(self.setVariable(r, c, i))
+            return successors
+        else:
+            raise ValueError
         raise NotImplementedError()
 
     def getAllSuccessors(self):
