@@ -3,6 +3,7 @@ import timeit
 import sys, os
 import random 
 import argparse
+import heapq
 
 BOX = 1
 ROW = 2
@@ -102,10 +103,11 @@ class Sudoku:
         Returns current domain for the (row, col) variable .
         """
         dom = range(1,10)
-        invalid = set(self.row(r) + self.col(c) + self.box(self.box_id(r,c)))
-        for item in invalid:
-            if item in dom:
-                dom.remove(item)
+        invalid = list(set(self.row(r) + self.col(c) + self.box(self.box_id(r,c))))
+#        for item in invalid:
+#            if item in dom:
+#                dom.remove(item)
+        crossOff(dom, invalid)
         return dom
 #        raise NotImplementedError()
 
@@ -191,7 +193,7 @@ class Sudoku:
             return successors
         else:
             raise ValueError
-        raise NotImplementedError()
+#        raise NotImplementedError()
 
     def getAllSuccessors(self):
         if not args.forward: 
@@ -208,7 +210,21 @@ class Sudoku:
         IMPLEMENT IN PART 4
         Returns true if all variables have non-empty domains.
         """
-        raise NotImplementedError()
+
+#        print self.factorRemaining.keys()
+#        for factor_type in (BOX, ROW, COL):
+#            for i in range(9):
+#        self.updateAllFactors()
+        for x in range(9):
+            for y in range(9):
+#                self.updateVariableFactors((x,y))
+                if self.board[x][y] == 0:
+                    domain = self.variableDomain(x, y)
+                    if domain == [None] * 9:
+#                        print (x,y), domain
+                        return False
+        return True
+#        raise NotImplementedError()
 
     # PART 5
     def mostConstrainedVariable(self):
@@ -216,6 +232,17 @@ class Sudoku:
         IMPLEMENT IN PART 5
         Returns the most constrained unassigned variable.
         """
+        mostconstrained = None
+        smallestdomain = 9
+        for x in range(9):
+            for y in range(9):
+                if self.board[x][y] == 0:
+                    domain = self.variableDomain(x, y)
+                    count = len([i for i in domain if i])
+                    if count < smallestdomain:
+                        mostconstrained = (x,y)
+                        smallestdomain = count
+        return mostconstrained
         raise NotImplementedError()
 
     # LOCAL SEARCH CODE
