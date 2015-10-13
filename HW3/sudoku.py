@@ -3,6 +3,7 @@ import timeit
 import sys, os
 import random 
 import argparse
+import heapq
 
 BOX = 1
 ROW = 2
@@ -102,10 +103,11 @@ class Sudoku:
         Returns current domain for the (row, col) variable .
         """
         dom = range(1,10)
-        invalid = set(self.row(r) + self.col(c) + self.box(self.box_id(r,c)))
-        for item in invalid:
-            if item in dom:
-                dom.remove(item)
+        invalid = list(set(self.row(r) + self.col(c) + self.box(self.box_id(r,c))))
+#        for item in invalid:
+#            if item in dom:
+#                dom.remove(item)
+        crossOff(dom, invalid)
         return dom
 #        raise NotImplementedError()
 
@@ -208,7 +210,19 @@ class Sudoku:
         IMPLEMENT IN PART 4
         Returns true if all variables have non-empty domains.
         """
-        raise NotImplementedError()
+
+#        print self.factorRemaining.keys()
+#        for factor_type in (BOX, ROW, COL):
+#            for i in range(9):
+#        self.updateAllFactors()
+        for x in range(9):
+            for y in range(9):
+#                self.updateVariableFactors((x,y))
+                domain = self.variableDomain(x, y)
+                if domain == [None] * 9:
+                    return False
+        return True
+#        raise NotImplementedError()
 
     # PART 5
     def mostConstrainedVariable(self):
