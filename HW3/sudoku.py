@@ -294,7 +294,7 @@ class Sudoku:
 
                 if self.board[r][c] == 0:
                     self.updateFactor(ROW,r)
-                    domain = self.variableDomain(r,c)
+                    domain = [x for x in self.variableDomain(r,c) if x != None]
 
                     domain = domain + [x for x in range(10) if x != 0 and x not in self.row(r)]
 
