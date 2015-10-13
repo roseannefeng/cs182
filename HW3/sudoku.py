@@ -260,9 +260,27 @@ class Sudoku:
         with all the row factors being held consistent. 
         Should call `updateAllFactors` at end.
         """
-        raise NotImplementedError()
-        # self.updateAllFactors()
-    
+
+        for r in xrange(0,9):
+            for c in xrange(0,9):
+
+
+                if self.board[r][c] == 0:
+                    self.updateFactor(ROW,r)
+                    domain = self.variableDomain(r,c)
+
+                    domain = domain + [x for x in range(10) if x != 0 and x not in self.row(r)]
+
+                    numOfPos = len(domain)
+                    random_index = random.randint(0,numOfPos-1)
+                    self.board[r][c] = domain[random_index]
+                    self.setVariable(r,c, domain[random_index])
+
+            print self.row(r)
+        print self.board
+        self.updateAllFactors()
+        #raise NotImplementedError()
+
     # PART 7
     def randomSwap(self):
         """
@@ -468,8 +486,9 @@ def solveCSP(problem):
 
 def solveLocal(problem):
     for r in range(1):
-        problem.randomRestart()  
+        problem.randomRestart()
         state = problem
+
         for i in range(100000):
             originalConflicts = state.numConflicts()
 
