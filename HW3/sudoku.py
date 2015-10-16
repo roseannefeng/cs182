@@ -302,9 +302,6 @@ class Sudoku:
                     random_index = random.randint(0,numOfPos-1)
                     self.board[r][c] = domain[random_index]
                     self.setVariable(r,c, domain[random_index])
-
-            print self.row(r)
-        print self.board
         self.updateAllFactors()
         #raise NotImplementedError()
 
@@ -315,7 +312,21 @@ class Sudoku:
         Returns two random variables that can be swapped without
         causing a row factor conflict.
         """
-        raise NotImplementedError()
+
+        random_row = random.randint(0,8)
+        random_col1 = random.randint(0,8)
+        random_col2 = random_col1
+        while(random_col2 == random_col1):
+            random_col2 = random.randint(0,8)
+
+
+        # temp = self.board[random_row][random_col1]
+        # self.board[random_row][random_col1] = self.board[random_row][random_col2]
+        # self.board[random_row][random_col2] = temp
+
+        return (random_row, random_col1), (random_row, random_col2)
+
+
       
 
     # PART 8
@@ -324,7 +335,49 @@ class Sudoku:
         IMPLEMENT FOR PART 8
         Decide if we should swap the values of variable1 and variable2.
         """
-        raise NotImplementedError()
+        
+        init_conflicts = self.numConflicts()
+
+        r1, c1 = variable1
+        r2, c2 = variable2
+
+        # ASSUME SWAP IS APPROPRIATE 
+        temp = self.board[r1][c1]
+        self.board[r1][c1] = self.board[r2][c2]
+        self.board[r2][c2] = temp
+
+        self.updateAllFactors()
+
+        res_conflicts = self.numConflicts()
+
+
+        # JUST KIDDING NOT FUCKING APPROPRIATE 
+        if res_conflicts > init_conflicts:
+            temp = self.board[r1][c1]
+            self.board[r1][c1] = self.board[r2][c2]
+            self.board[r2][c2] = temp
+            # print init_conflicts
+            self.updateAllFactors()
+        # else:
+        #     print res_conflicts
+
+        # AH FUCK IT LET IT BE APPROPRIATE ANYWAY WITH PROBABILITY 1/1000
+        if (res_conflicts > init_conflicts and 0 == random.randint(0,1000)):
+            temp = self.board[r1][c1]
+            self.board[r1][c1] = self.board[r2][c2]
+            self.board[r2][c2] = temp
+            # print res_conflicts, "ignore previous conflict count"
+            self.updateAllFactors()
+
+
+        # print init_conflicts
+        # print res_conflicts
+
+            
+
+        # self.randomRestart()
+        # print self.board
+        # raise NotImplementedError()
 
         
     ### IGNORE - PRINTING CODE
