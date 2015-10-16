@@ -341,43 +341,18 @@ class Sudoku:
         r1, c1 = variable1
         r2, c2 = variable2
 
-        # ASSUME SWAP IS APPROPRIATE 
-        temp = self.board[r1][c1]
-        self.board[r1][c1] = self.board[r2][c2]
-        self.board[r2][c2] = temp
 
-        self.updateAllFactors()
+
+        self.modifySwap(variable1, variable2)
+
 
         res_conflicts = self.numConflicts()
 
-
-        # JUST KIDDING NOT FUCKING APPROPRIATE 
         if res_conflicts > init_conflicts:
-            temp = self.board[r1][c1]
-            self.board[r1][c1] = self.board[r2][c2]
-            self.board[r2][c2] = temp
-            # print init_conflicts
-            self.updateAllFactors()
-        # else:
-        #     print res_conflicts
-
-        # AH FUCK IT LET IT BE APPROPRIATE ANYWAY WITH PROBABILITY 1/1000
+            self.modifySwap(variable1, variable2)
         if (res_conflicts > init_conflicts and 0 == random.randint(0,1000)):
-            temp = self.board[r1][c1]
-            self.board[r1][c1] = self.board[r2][c2]
-            self.board[r2][c2] = temp
-            # print res_conflicts, "ignore previous conflict count"
-            self.updateAllFactors()
-
-
-        # print init_conflicts
-        # print res_conflicts
-
-            
-
-        # self.randomRestart()
-        # print self.board
-        # raise NotImplementedError()
+            self.modifySwap(variable1, variable2)
+      
 
         
     ### IGNORE - PRINTING CODE
@@ -570,6 +545,7 @@ def solveLocal(problem):
         state = problem
 
         for i in range(100000):
+
             originalConflicts = state.numConflicts()
 
             v1, v2 = state.randomSwap()        
@@ -587,6 +563,7 @@ def solveLocal(problem):
                 
                 
             if state.numConflicts() == 0:
+                print i
                 return state
                 break
 
