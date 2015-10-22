@@ -1,3 +1,5 @@
+# Roseanne Feng and Nelson Yanes-Nunez
+
 from copy import deepcopy
 import timeit
 import sys, os
@@ -87,7 +89,6 @@ class Sudoku:
                 if self.board[i][j] == 0:
                     return (i, j)
         return None
-#        raise NotImplementedError()
 
     def complete(self):
         """
@@ -95,7 +96,6 @@ class Sudoku:
         Returns true if the assignment is complete. 
         """
         return not(self.firstEpsilonVariable())
-#        raise NotImplementedError()
 
     def variableDomain(self, r, c):
         """
@@ -104,12 +104,8 @@ class Sudoku:
         """
         dom = range(1,10)
         invalid = list(set(self.row(r) + self.col(c) + self.box(self.box_id(r,c))))
-#        for item in invalid:
-#            if item in dom:
-#                dom.remove(item)
         crossOff(dom, invalid)
         return dom
-#        raise NotImplementedError()
 
     # PART 2
     def updateFactor(self, factor_type, i):
@@ -131,14 +127,9 @@ class Sudoku:
         else:
             raise ValueError
 
-#        for item in remove:
-#            if item in values:
-#                values[item-1] = None
-
         self.factorNumConflicts[factor_type, i] = crossOff(values, remove)
         self.factorRemaining[factor_type, i] = values
-        return None #values
-#        raise NotImplementedError()
+        return None
         
     def updateAllFactors(self):
         """
@@ -151,7 +142,6 @@ class Sudoku:
             self.updateFactor(ROW, i)
             self.updateFactor(COL, i)
         return None
-#        raise NotImplementedError()
 
     def updateVariableFactors(self, variable):
         """
@@ -163,7 +153,6 @@ class Sudoku:
         self.updateFactor(BOX, box)
         self.updateFactor(ROW, row)
         self.updateFactor(COL, col)
-#        raise NotImplementedError()
 
     # CSP SEARCH CODE
     def nextVariable(self):
@@ -193,7 +182,6 @@ class Sudoku:
             return successors
         else:
             raise ValueError
-#        raise NotImplementedError()
 
     def getAllSuccessors(self):
         if not args.forward: 
@@ -211,20 +199,13 @@ class Sudoku:
         Returns true if all variables have non-empty domains.
         """
 
-#        print self.factorRemaining.keys()
-#        for factor_type in (BOX, ROW, COL):
-#            for i in range(9):
-#        self.updateAllFactors()
         for x in range(9):
             for y in range(9):
-#                self.updateVariableFactors((x,y))
                 if self.board[x][y] == 0:
                     domain = self.variableDomain(x, y)
                     if domain == [None] * 9:
-#                        print (x,y), domain
                         return False
         return True
-#        raise NotImplementedError()
 
     # PART 5
     def mostConstrainedVariable(self):
@@ -303,7 +284,6 @@ class Sudoku:
                     self.board[r][c] = domain[random_index]
                     self.setVariable(r,c, domain[random_index])
         self.updateAllFactors()
-        #raise NotImplementedError()
 
     # PART 7
     def randomSwap(self):
@@ -319,15 +299,12 @@ class Sudoku:
         while(random_col2 == random_col1):
             random_col2 = random.randint(0,8)
 
-
         # temp = self.board[random_row][random_col1]
         # self.board[random_row][random_col1] = self.board[random_row][random_col2]
         # self.board[random_row][random_col2] = temp
 
         return (random_row, random_col1), (random_row, random_col2)
 
-
-      
 
     # PART 8
     def gradientDescent(self, variable1, variable2):
@@ -337,20 +314,14 @@ class Sudoku:
         """
         
         init_conflicts = self.numConflicts()
-
-        r1, c1 = variable1
-        r2, c2 = variable2
-
-
-
         self.modifySwap(variable1, variable2)
-
-
         res_conflicts = self.numConflicts()
 
-        if res_conflicts > init_conflicts:
-            self.modifySwap(variable1, variable2)
-        if (res_conflicts > init_conflicts and 0 == random.randint(0,1000)):
+        if res_conflicts > init_conflicts: # if not better, undo the swap
+            self.modifySwap(variable1, variable2) 
+
+        #nonoptimal swap with probability .001
+        if (res_conflicts < init_conflicts and 0 == random.randint(0,1000)):
             self.modifySwap(variable1, variable2)
       
 
@@ -559,18 +530,17 @@ def solveLocal(problem):
                 display.display(display.HTML(state.prettyprinthtml()))
                 display.clear_output(True)
                 sleep(0.5)
-
-                
                 
             if state.numConflicts() == 0:
-                print i
                 return state
                 break
 
             if args.debug:
                 os.system("clear")
                 print state
-                raw_input("Press Enter to continue...")            
+                raw_input("Press Enter to continue...")
+
+    print state.numConflicts(), 'conflicts remaining'
     
                 
 
