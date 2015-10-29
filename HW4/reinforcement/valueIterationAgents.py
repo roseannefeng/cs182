@@ -47,6 +47,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         "*** YOUR CODE HERE ***"
         for i in range(self.iterations):
           temp = util.Counter()
+
           for s in self.mdp.getStates():
             best = float('-inf')
             actions = self.mdp.getPossibleActions(s)
@@ -58,8 +59,6 @@ class ValueIterationAgent(ValueEstimationAgent):
                 temp[s] = best
 
           self.values = temp
-#          for s in self.mdp.getStates():
-#            self.values[s] = temp[s]
 
 
     def getValue(self, state):
