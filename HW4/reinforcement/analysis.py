@@ -24,38 +24,43 @@ def question2():
     answerNoise = 0#0.2
     return answerDiscount, answerNoise
 
+# prefer close exit, risk cliff
 def question3a():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.4 # close exit, discount farther states
+    answerNoise = 0
+    answerLivingReward = -0.8 # lower = risks cliffs
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# prefer close exit, avoid cliff
 def question3b():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.4
+    answerNoise = 0.2
+    answerLivingReward = -0.2
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# prefer distant exit, risk cliff
 def question3c():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 1
+    answerNoise = 0
+    answerLivingReward = -0.8
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# prefer distant exit, avoid cliff
 def question3d():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 1
+    answerNoise = 0.2
+    answerLivingReward = -0.2
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# avoid both exits and the cliff, does not terminate
 def question3e():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 1
+    answerNoise = 0
+    answerLivingReward = 1
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
