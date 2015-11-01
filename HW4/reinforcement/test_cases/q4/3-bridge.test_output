@@ -725,8 +725,8 @@ Policy is NOT correct.   Student solution:
 	policy: """
         __________   exit         __________
         exit         west         exit      
-        exit         west         exit      
-        exit         west         exit      
+        exit         south        exit      
+        exit         north        exit      
         exit         west         exit      
         exit         west         exit      
         __________   exit         __________

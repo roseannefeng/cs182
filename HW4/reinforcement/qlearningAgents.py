@@ -71,7 +71,6 @@ class QLearningAgent(ReinforcementAgent):
         for trans in transitions:
           if self.getQValue(state, trans) > QVAL:
             QVAL = self.getQValue(state,trans)
-            max_action = trans
         return QVAL
 
 
@@ -82,11 +81,22 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
         "*** YOUR CODE HERE ***"
+        QVAL = float("-inf")
         actions = self.getLegalActions(state)
-        if not(actions):
-          return None
-        qvals = map(lambda x: (self.computeValueFromQValues(state), x), actions)
-        return max(qvals)[1]
+        action_list = []
+        # if not(actions):
+        #   return None
+        # qvals = map(lambda x: (self.computeValueFromQValues(state), x), actions)
+        # return max(qvals)[1]
+
+        for trans in actions:
+          if self.getQValue(state, trans) > QVAL:
+            QVAL = self.getQValue(state,trans)
+            action_list = []
+            action_list.append(trans)
+          elif self.getQValue(state, trans) == QVAL:
+            action_list.append(trans)
+        return random.choice(action_list)
 
    
 
