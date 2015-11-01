@@ -49,6 +49,7 @@ class ValueIterationAgent(ValueEstimationAgent):
           temp = util.Counter()
 
           for s in self.mdp.getStates():
+            # rewrite this to work better w/ computeActionFromValues ?
             best = float('-inf')
             actions = self.mdp.getPossibleActions(s)
             qvals = map(lambda x: self.computeQValueFromValues(s, x), actions)
