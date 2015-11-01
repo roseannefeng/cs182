@@ -99,6 +99,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         if not(actions):
           return None
         qvals = map(lambda x: (self.computeQValueFromValues(state, x), x), actions)
+        print max(qvals)[1]
         return max(qvals)[1]
 
     def getPolicy(self, state):
