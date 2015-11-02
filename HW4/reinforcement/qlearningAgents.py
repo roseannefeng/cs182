@@ -71,6 +71,7 @@ class QLearningAgent(ReinforcementAgent):
         for trans in transitions:
           if self.getQValue(state, trans) > QVAL:
             QVAL = self.getQValue(state,trans)
+
         return QVAL
 
 
@@ -83,6 +84,8 @@ class QLearningAgent(ReinforcementAgent):
         "*** YOUR CODE HERE ***"
         QVAL = float("-inf")
         actions = self.getLegalActions(state)
+        if not actions:
+          return None
         action_list = []
         # if not(actions):
         #   return None
@@ -117,11 +120,12 @@ class QLearningAgent(ReinforcementAgent):
         "*** YOUR CODE HERE ***"
 
         if not util.flipCoin(self.epsilon):
-          return computeActionFromQValues #Take best policy action
+          return self.computeActionFromQValues(state) #Take best policy action
         else:
           if len(legalActions) != 0:
             return random.choice(legalActions)[1] #Take random action
-          return None
+          else:
+            return None
 
     def update(self, state, action, nextState, reward):
         """
@@ -134,8 +138,7 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         q_val = self.qval[(state,action)]
-
-        self.qval[(state,action)] =  q_val + self.alpha * (reward + self.discount * self.getValue(state) - q_val) 
+        self.qval[(state,action)] =  q_val + self.alpha * (reward + self.discount * self.getValue(nextState) - q_val) 
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
