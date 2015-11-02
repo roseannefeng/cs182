@@ -113,7 +113,7 @@ class QLearningAgent(ReinforcementAgent):
         "*** YOUR CODE HERE ***"
 
         if not util.flipCoin(self.epsilon):
-          return computeActionFromQValues #Take best policy action
+          return self.computeActionFromQValues(state) #Take best policy action
         else:
           if len(legalActions) != 0:
             return random.choice(legalActions)[1] #Take random action
