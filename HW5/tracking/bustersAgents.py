@@ -177,7 +177,7 @@ class GreedyBustersAgent(BustersAgent):
 
 
         for ind, ghost in enumerate(livingGhostPositionDistributions):
-            greedy_positions.append((0,0))
+            greedy_positions.append(None)
             enter = False
             for i in ghost:
                 new_prob = ghost[i]
@@ -185,14 +185,14 @@ class GreedyBustersAgent(BustersAgent):
                     greedy_positions[ind] = i
                     enter = True
                     curr_prob = new_prob
-            if enter == False and greedy_positions[len(greedy_positions)-1]:
-                greedy_positions[len(greedy_positions)-1] = None
-        for i in greedy_positions:
-            if i != None:
-                distance = self.distancer.getDistance(i, pacmanPosition)
+            # if enter == False and greedy_positions[len(greedy_positions)-1]:
+            #     greedy_positions[len(greedy_positions)-1] = None
+            recent = greedy_positions[ind]
+            if recent != None:
+                distance = self.distancer.getDistance(recent, pacmanPosition)
                 if distance < closestDistance:
                     closestDistance = distance
-                    closestGhost = i
+                    closestGhost = recent
         for action in legal:
             successorPosition = Actions.getSuccessor(pacmanPosition, action)
             new_distance = self.distancer.getDistance(successorPosition, closestGhost)
