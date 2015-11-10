@@ -168,6 +168,7 @@ class GreedyBustersAgent(BustersAgent):
         closestDistance = float('inf')
         closestGhost = None
         action_to_take = None
+        greedy_positions = []
 
 
 
@@ -175,30 +176,28 @@ class GreedyBustersAgent(BustersAgent):
 
 
 
-        for ghost in livingGhostPositionDistributions:
-            # self.elapseTime(gameState)
-            # for inf in self.inferenceModules:
-
-            #     inf.observeState(self.observationFunction(gameState), gameState)
-            #     inf.elapseTime(gameState)
-
+        for ind, ghost in enumerate(livingGhostPositionDistributions):
+            greedy_positions.append((0,0))
+            enter = False
             for i in ghost:
                 new_prob = ghost[i]
                 if new_prob > curr_prob:
-                    #greedy_positions.append(i)
-
-
+                    greedy_positions[ind] = i
+                    enter = True
                     curr_prob = new_prob
-                    distance = self.distancer.getDistance(i, pacmanPosition)
-                    if distance < closestDistance:
-                        closestDistance = distance
-                        closestGhost = i
+            if enter == False and greedy_positions[len(greedy_positions)-1]:
+                greedy_positions[len(greedy_positions)-1] = None
+        for i in greedy_positions:
+            if i != None:
+                distance = self.distancer.getDistance(i, pacmanPosition)
+                if distance < closestDistance:
+                    closestDistance = distance
+                    closestGhost = i
         for action in legal:
             successorPosition = Actions.getSuccessor(pacmanPosition, action)
             new_distance = self.distancer.getDistance(successorPosition, closestGhost)
             if new_distance < closestDistance:
                 action_to_take = action
-                closestDistance = new_distance
         return action_to_take
                 
 
