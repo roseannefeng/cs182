@@ -346,7 +346,7 @@ class ParticleFilter(InferenceModule):
         """
         "*** YOUR CODE HERE ***"
         newParticles = []
-        for p in self.particles:#.particles: # ghost's position
+        for p in self.particles: # ghost's position
             newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, p))
             #newPostDist[p] = Pr( ghost is at position p at time t + 1 | ghost is at position oldPos at time t )
             newParticles.append(util.sample(newPosDist)) # sample from dist at time t+1 to get particle for t+1
