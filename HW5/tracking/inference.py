@@ -274,6 +274,12 @@ class ParticleFilter(InferenceModule):
         """
         "*** YOUR CODE HERE ***"
 
+        particles = []
+        for i in range(self.numParticles):
+            for p in self.legalPositions:
+                particles.append(p) 
+        self.particles = particles # list of positions? I guess?
+
     def observe(self, observation, gameState):
         """
         Update beliefs based on the given distance observation. Make sure to
@@ -305,7 +311,24 @@ class ParticleFilter(InferenceModule):
         emissionModel = busters.getObservationDistribution(noisyDistance)
         pacmanPosition = gameState.getPacmanPosition()
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        if noisyDistance == None: # if ghost is captured
+            prison = self.getJailPosition()
+            self.particles = [prison] * self.numParticles
+        else:
+            allPossible = util.Counter()
+            b = self.getBeliefDistribution()
+            for p in self.particles:
+                trueDistance = util.manhattanDistance(p, pacmanPosition)
+                allPossible[p] = emissionModel[trueDistance] * b[p]
+
+            if allPossible.totalCount() == 0: # all particles receive 0 weight
+                self.initializeUniformly(gameState) # changes self.particles
+            else:
+                newParticles = []
+                for k in range(self.numParticles):
+                    newParticles.append(util.sample(allPossible))
+                self.particles = newParticles
 
     def elapseTime(self, gameState):
         """
@@ -322,7 +345,14 @@ class ParticleFilter(InferenceModule):
         a belief distribution.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        newParticles = []
+        for p in self.particles:#.particles: # ghost's position
+            newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, p))
+            #newPostDist[p] = Pr( ghost is at position p at time t + 1 | ghost is at position oldPos at time t )
+            newParticles.append(util.sample(newPosDist)) # sample from dist at time t+1 to get particle for t+1
+        self.particles = newParticles
+
+#        util.raiseNotDefined()
 
     def getBeliefDistribution(self):
         """
@@ -332,7 +362,12 @@ class ParticleFilter(InferenceModule):
         Counter object)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        beliefs = util.Counter() # key, value = position, probability
+        for p in self.particles:
+            beliefs[p] += 1.
+        beliefs.normalize() # each particle has a uniform probability
+        return beliefs
+        #util.raiseNotDefined()
 
 class MarginalInference(InferenceModule):
     """
