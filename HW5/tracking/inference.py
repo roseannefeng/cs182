@@ -275,9 +275,10 @@ class ParticleFilter(InferenceModule):
         "*** YOUR CODE HERE ***"
 
         particles = []
-        for i in range(self.numParticles):
-            for p in self.legalPositions:
-                particles.append(p) 
+        legal = len(self.legalPositions)
+        for p in self.legalPositions:
+            for i in range(self.numParticles / legal):
+                particles.append(p)
         self.particles = particles # list of positions? I guess?
 
     def observe(self, observation, gameState):
@@ -345,6 +346,8 @@ class ParticleFilter(InferenceModule):
         a belief distribution.
         """
         "*** YOUR CODE HERE ***"
+
+        # Version 1
         newParticles = []
         for p in self.particles: # ghost's position
             newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, p))
@@ -352,7 +355,29 @@ class ParticleFilter(InferenceModule):
             newParticles.append(util.sample(newPosDist)) # sample from dist at time t+1 to get particle for t+1
         self.particles = newParticles
 
-#        util.raiseNotDefined()
+
+        # Version 2
+        """
+        oldBeliefs = self.getBeliefDistribution()
+        b = #util.Counter()
+        for p in self.particles: #for x_i-1 in s_i-1
+            newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, p))
+            p_ = util.sample(newPosDist) #forward particle
+            b[p_] = newPosDist[p_] * oldBeliefs[p_] # reweight particle? I guess?
+        b.normalize()
+        """
+
+        # resample particles
+        """
+        newParticles = []
+        for p in self.particles:
+            newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, p))
+            p_ = util.sample(newPosDist) #forward particle
+            newParticles.append(p_)
+
+        self.particles = newParticles
+        """
+
 
     def getBeliefDistribution(self):
         """
@@ -366,6 +391,7 @@ class ParticleFilter(InferenceModule):
         for p in self.particles:
             beliefs[p] += 1.
         beliefs.normalize() # each particle has a uniform probability
+        #self.beliefs = beliefs
         return beliefs
         #util.raiseNotDefined()
 
