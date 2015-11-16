@@ -170,12 +170,6 @@ class GreedyBustersAgent(BustersAgent):
         action_to_take = None
         greedy_positions = []
 
-
-
-
-
-
-
         for ind, ghost in enumerate(livingGhostPositionDistributions):
             greedy_positions.append(None)
             enter = False
